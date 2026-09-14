@@ -24,6 +24,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    
+    <!-- Supabase Cloud Sync Pre-bootstrap Configuration -->
+    <script>
+      (function() {
+        const DEFAULT_SB_URL = "https://jbbawnuhlollasflzgrg.supabase.co";
+        const DEFAULT_SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpiYmF3bnVobG9sbGFzZmx6Z3JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkzOTMxMzcsImV4cCI6MjEwNDk2OTEzN30.VWB8DxD5Mc0whJkjiaOo7TzKwnWqwPMkdfvbhD3ZHJI";
+        try {
+          if (!localStorage.getItem("stumarcot_supabase_url")) {
+            localStorage.setItem("stumarcot_supabase_url", DEFAULT_SB_URL);
+          }
+          if (!localStorage.getItem("stumarcot_supabase_anon_key")) {
+            localStorage.setItem("stumarcot_supabase_anon_key", DEFAULT_SB_KEY);
+          }
+        } catch (e) {
+          console.warn("[PWA] LocalStorage access warning:", e);
+        }
+      })();
+    </script>
+    
     <script type="module" crossorigin src="./assets/index-hgjhj-0G.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-BATisU_-.css">
   </head>
