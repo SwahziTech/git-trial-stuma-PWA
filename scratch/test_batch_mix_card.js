@@ -14,23 +14,29 @@ try {
 
 const bundle = fs.readFileSync('assets/index-hgjhj-0G.js', 'utf8');
 
-// 2. Test Point 1: Culverts, kerbstones, mifuniko, poles, press blocks do NOT use dawa
-console.log('\n--- 1. Testing Chemical Additive (Dawa = 0) for Required Products ---');
-const recipesToCheck = [
+// 2. Test Point 1: Culverts, kerbstones, mifuniko, poles do NOT use dawa (chemicalLiters: 0)
+// Vibro paving blocks DO use dawa (chemicalLiters: 1)
+console.log('\n--- 1. Testing Chemical Additive (Dawa) for Required Products ---');
+const zeroDawaRecipes = [
   { name: 'culverts_heavy', regex: /culverts_heavy:\{[^}]+chemicalLiters:0/ },
   { name: 'curbstones_vibro', regex: /curbstones_vibro:\{[^}]+chemicalLiters:0/ },
   { name: 'mifuniko_vibro', regex: /mifuniko_vibro:\{[^}]+chemicalLiters:0/ },
-  { name: 'poles_bicon', regex: /poles_bicon:\{[^}]+chemicalLiters:0/ },
-  { name: 'paving_vibro', regex: /paving_vibro:\{[^}]+chemicalLiters:0/ }
+  { name: 'poles_bicon', regex: /poles_bicon:\{[^}]+chemicalLiters:0/ }
 ];
 
-recipesToCheck.forEach(r => {
+zeroDawaRecipes.forEach(r => {
   const match = bundle.match(r.regex);
   if (!match) {
     throw new Error(`Recipe ${r.name} does NOT have chemicalLiters: 0 in bundle!`);
   }
   console.log(`✓ Recipe ${r.name}: chemicalLiters = 0 confirmed`);
 });
+
+const pavingMatch = bundle.match(/paving_vibro:\{[^}]+chemicalLiters:1/);
+if (!pavingMatch) {
+  throw new Error('Recipe paving_vibro does NOT have chemicalLiters: 1 (Dawa) in bundle!');
+}
+console.log('✓ Recipe paving_vibro: chemicalLiters = 1 (Dawa) confirmed');
 
 // 3. Test Point 2: Color selection dropdown in bundle
 console.log('\n--- 2. Testing Color Selection Dropdown in Bundle ---');

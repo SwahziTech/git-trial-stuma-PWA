@@ -121,6 +121,7 @@ const componentCode = `_1=({prefillItemId:s,onClearPrefill:t,onSuccess:r})=>{
 
   // Point 1: Inspect ratios and molds doc carefully at each product material.
   // Culverts, kerbstones, mifuniko, poles, press blocks do NOT use dawa (chemicalLiters: 0).
+  // Floor tiles, wall tiles, and vibro paving DO use dawa (chemicalLiters: 1).
   const D = B.useMemo(() => {
     if (!N) return null;
     const nameLow = ((N.name || "") + " " + (N.category || "")).toLowerCase();
@@ -189,11 +190,20 @@ const componentCode = `_1=({prefillItemId:s,onClearPrefill:t,onSuccess:r})=>{
       };
     }
     if (nameLow.includes("paving")) {
+      if (nameLow.includes("press")) {
+        return {
+          sandBuckets: 14,
+          chippingBuckets: 10,
+          aggregateBuckets: 0,
+          chemicalLiters: 0,
+          pigmentPerBag: { White: 0, Red: 4, Grey: 1, Black: 2 }
+        };
+      }
       return {
         sandBuckets: 7,
         chippingBuckets: 11,
         aggregateBuckets: 0,
-        chemicalLiters: 0,
+        chemicalLiters: 1,
         pigmentPerBag: { White: 0, Red: 4, Grey: 1, Black: 2 }
       };
     }
@@ -2151,8 +2161,12 @@ newBundle = newBundle.replace(/category:"Kerbstones",unit:"pcs",pcs_per_sqm:null
 newBundle = newBundle.replace(/category:"Culverts",unit:"pcs",pcs_per_sqm:null,colors:\["White"\]/g, 'category:"Culverts",unit:"pcs",pcs_per_sqm:null,colors:[]');
 newBundle = newBundle.replace(/category:"Mifuniko \/ Covers",unit:"pcs",pcs_per_sqm:null,colors:\["White"\]/g, 'category:"Mifuniko / Covers",unit:"pcs",pcs_per_sqm:null,colors:[]');
 
-// Point 1: Culverts, kerbstones, mifuniko, poles, paving do NOT use dawa (chemicalLiters: 0)
-newBundle = newBundle.replace(/(paving_vibro:\{[^}]+)1L Dawa \+ Pigment([^}]+chemicalLiters:)1/g, "$1Pigment$20");
+// Point 1: Culverts, kerbstones, mifuniko, poles do NOT use dawa (chemicalLiters: 0)
+// Vibro paving DOES use dawa (chemicalLiters: 1)
+newBundle = newBundle.replace(
+  'paving_vibro:{id:"paving_vibro",name:"Paving Blocks (Vibro 1:7:11)",description:"1 Bag Cem : 7 Buckets Sand : 11 Buckets Chipping : Pigment",method:"vibro",cementBags:1,sandBuckets:7,chippingBuckets:11,aggregateBuckets:0,chemicalLiters:0,',
+  'paving_vibro:{id:"paving_vibro",name:"Paving Blocks (Vibro 1:7:11)",description:"1 Bag Cem : 7 Buckets Sand : 11 Buckets Chipping : 1L Dawa + Pigment",method:"vibro",cementBags:1,sandBuckets:7,chippingBuckets:11,aggregateBuckets:0,chemicalLiters:1,'
+);
 newBundle = newBundle.replace(/(curbstones_vibro:\{[^}]+chemicalLiters:)\.5/g, "$10");
 newBundle = newBundle.replace(/(mifuniko_vibro:\{[^}]+chemicalLiters:)\.5/g, "$10");
 newBundle = newBundle.replace(/(culverts_heavy:\{[^}]+chemicalLiters:)\.5/g, "$10");
